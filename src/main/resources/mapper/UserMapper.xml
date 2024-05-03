@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.synu.mapper.UserMapper">
+
+
+    <sql id="Base_Column_List">
+        user_id,user_nick_name,user_name,user_password,
+        user_email,user_phone_number,user_sex,
+        user_introduce,user_reg_time,user_age,user_is_admin
+    </sql>
+
+    <select id="userSelectAll" resultType="com.example.synu.pojo.User">
+        select
+        <include refid="Base_Column_List"></include>
+        from user
+        where del_flag = 0 and user_is_admin = 0
+        order by user_reg_time desc
+        limit 5
+    </select>
+
+
+    <!--查询用户总数-->
+    <select id="getCountUser" resultType="java.lang.Integer">
+        select count(*)
+        from user
+        where del_flag = 0
+    </select>
+
+    <!--查询用户姓名-->
+    <select id="getUserName" resultType="com.example.synu.pojo.User">
+        select user_id,user_nick_name,user_name,user_password
+        from user
+        where del_flag = 0
+    </select>
+
+
+    <select id="userTest" resultType="com.example.synu.pojo.User">
+        select *
+        from user
+        where user_name = #{userName}
+        and user_password = #{userPassword}
+    </select>
+
+
+    <!--用户登录查询-->
+    <select id="userLogin" resultType="com.example.synu.pojo.User">
+        select
+        <include refid="Base_Column_List"></include>
+        from user
+        where user_name = #{userName}
+        and user_password = #{userPassword}
+        and del_flag = 0
+    </select>
+
+    <!--注册时候查询是否有重复用户名 1：有 0：没有-->
+    <select id="selectUserName" resultType="java.lang.Integer">
+        select count(*)
+        from user
+        where user_name = #{userName}
+    </select>
+
+    <!-- 分页查询相关：查询员工总数，符合条件-->
+    <sql id="queryWhere">
+        <where>
+            <if test="query.userId != null">
+                user_id = #{query.userId}
+            </if>
+            <if test="query.userNickName != null">
+                and user_nick_name like concat('%',#{query.userNickName},'%')
+            </if>
+            <if test="query.userName != null">
+                and user_name like concat('%',#{query.userName},'%')
+            </if>
+            <if test="query.userPassword != null">
+                and user_password = #{query.userPassword}
+            </if>
+            <if test="query.userEmail != null">
+                and user_email = #{query.userEmail}
+            </if>
+            <if test="query.userPhoneNumber != null">
+                and user_phone_number = #{query.userPhoneNumber}
+            </if>
+            <if test="query.userSex != null">
+                and user_sex = #{query.userSex}
+            </if>
+            <if test="query.userIntroduce != null">
+                and user_introduce = #{query.userIntroduce}
+            </if>
+            <if test="query.userRegTime != null">
+                and userRegTime = #{query.userRegTime}
+            </if>
+            <if test="query.userAge != null">
+                and user_age = #{query.userAge}
+            </if>
+            and del_flag = 0
+        </where>
+    </sql>
+    <!-- 分页查询-->
+    <select id="selectPage" resultType="com.example.synu.pojo.User">
+        select
+        <include refid="Base_Column_List"></include>
+        from user
+        <include refid="queryWhere"></include>
+    </select>
+
+    <!--插入用户-->
+    <insert id="userInsert" parameterType="com.example.synu.pojo.User">
+            insert into user
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="userId != null">
+                    user_id,
+                </if>
+                <if test="userNickName != null">
+                    user_nick_name,
+                </if>
+                <if test="userName != null">
+                    user_name,
+                </if>
+                <if test="userPassword != null">
+                    user_password,
+                </if>
+                <if test="userEmail != null">
+                    user_email,
+                </if>
+                <if test="userPhoneNumber != null">
+                    user_phone_number,
+                </if>
+                <if test="userSex != null">
+                    user_sex,
+                </if>
+                <if test="userIntroduce != null">
+                    user_introduce,
+                </if>
+                <if test="userRegTime != null">
+                    user_reg_time,
+                </if>
+                <if test="userAge != null">
+                    user_age,
+                </if>
+                user_is_admin,
+                del_flag,
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                    <if test="userId != null">
+                        #{userId,jdbcType=INTEGER},
+                    </if>
+                    <if test="userNickName != null">
+                        #{userNickName,jdbcType=VARCHAR},
+                    </if>
+                    <if test="userName != null">
+                        #{userName,jdbcType=VARCHAR},
+                    </if>
+                    <if test="userPassword != null">
+                        #{userPassword,jdbcType=VARCHAR},
+                    </if>
+                    <if test="userEmail != null">
+                        #{userEmail,jdbcType=VARCHAR},
+                    </if>
+                    <if test="userPhoneNumber != null">
+                        #{userPhoneNumber,jdbcType=VARCHAR},
+                    </if>
+                    <if test="userSex != null">
+                        #{userSex,jdbcType=VARCHAR},
+                    </if>
+                    <if test="userIntroduce != null">
+                        #{userIntroduce,jdbcType=VARCHAR},
+                    </if>
+                    <if test="userRegTime != null">
+                        #{userRegTime,jdbcType=TIMESTAMP},
+                    </if>
+                    <if test="userAge != null">
+                        #{userAge,jdbcType=INTEGER},
+                    </if>
+                    0,
+                    0
+                </trim>
+    </insert>
+
+    <!--得到一个用户-->
+    <select id="getOneUser" parameterType="java.lang.Integer" resultType="com.example.synu.pojo.User">
+        select
+        <include refid="Base_Column_List"></include>
+        from user
+        where user_id = #{id}
+        and del_flag = 0
+    </select>
+
+
+    <!--修改得到的一个用户-->
+    <update id="userUpdate" parameterType="com.example.synu.pojo.User">
+        update user
+        <set>
+            <if test="userNickName != null">
+                user_nick_name = #{userNickName,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="userPassword != null">
+                user_password = #{userPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="userEmail != null">
+                user_email = #{userEmail,jdbcType=VARCHAR},
+            </if>
+            <if test="userPhoneNumber != null">
+                user_phone_number = #{userPhoneNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="userSex != null">
+                user_sex = #{userSex,jdbcType=VARCHAR},
+            </if>
+            <if test="userIntroduce != null">
+                user_introduce = #{userIntroduce,jdbcType=VARCHAR},
+            </if>
+            <if test="userRegTime != null">
+                user_reg_time = #{userRegTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userAge != null">
+                user_age = #{userAge,jdbcType=INTEGER},
+            </if>
+        </set>
+        where user_id = #{userId}
+    </update>
+
+    <!--删除用户-->
+    <update id="userDelete" parameterType="java.lang.Integer">
+        update user
+        set del_flag = 1
+        where user_id = #{id}
+    </update>
+    <update id="changeAdmin" parameterType="java.lang.Integer">
+        update user
+        set user_is_admin = #{isAdmin}
+        where user_id = #{userId}
+    </update>
+
+
+</mapper>

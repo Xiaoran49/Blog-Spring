@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.synu.mapper.LikeMapper">
+
+
+    <sql id="Base_Column_List">
+        id,article_id,user_id
+    </sql>
+
+
+    <select id="getLikeCount" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM likeTable
+                 INNER JOIN `articles` ON articles.article_id = likeTable.article_id
+                 INNER JOIN `user` ON user.user_id = likeTable.user_id
+        WHERE articles.article_id = #{id}
+    </select>
+
+    <!--点赞-->
+    <insert id="confirmLike">
+        INSERT INTO likeTable (article_id, user_id) VALUES (#{articleId},#{userId});
+    </insert>
+    <update id="likeCountAdd">
+        UPDATE articles SET like_count = like_count + 1 WHERE article_id = #{articleId};
+    </update>
+
+    <!--取消点赞-->
+    <update id="cancelLike">
+        DELETE FROM likeTable WHERE article_id = #{articleId} AND user_id = #{userId};
+    </update>
+    <update id="likeCountSub">
+        UPDATE articles SET like_count = like_count - 1 WHERE article_id = #{articleId};
+    </update>
+
+
+    <!--是否点赞-->
+    <select id="isLike" resultType="java.lang.Integer">
+        select count(*)
+        from likeTable
+        WHERE article_id = #{articleId} AND user_id = #{userId}
+    </select>
+
+    <!--查询点赞的文章-->
+    <select id="getLikeArticles" resultType="com.example.synu.pojo.Articles">
+        SELECT
+            article_id,a.user_id as user_id,article_title,article_content,article_create_time,article_last_update_time,
+            like_count,view_count,user_nick_name
+        FROM
+            articles a
+                INNER JOIN
+            user u ON a.user_id = u.user_id
+        WHERE a.del_flag = 0 AND a.article_id IN (
+            SELECT article_id
+            FROM likeTable
+            WHERE user_id = #{id}
+            ORDER BY article_last_update_time DESC
+        )
+
+    </select>
+    <!--查询点赞该文章的人-->
+    <select id="showLikes" resultType="com.example.synu.pojo.User">
+        SELECT user.user_id,user.user_nick_name
+        FROM likeTable
+                 JOIN articles ON likeTable.article_id = articles.article_id
+                 JOIN user ON likeTable.user_id = user.user_id
+        WHERE articles.article_id = #{id}
+    </select>
+
+
+</mapper>

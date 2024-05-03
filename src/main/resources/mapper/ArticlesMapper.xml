@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.synu.mapper.ArticlesMapper">
+
+
+    <sql id="Base_Column_List">
+        article_id,article_title,article_content,
+        article_create_time,article_last_update_time,user_id,
+        like_count,view_count
+    </sql>
+
+    <!--查询文章总数-->
+    <select id="getCountArt" resultType="java.lang.Integer">
+        select count(*)
+        from articles
+        where del_flag = 0
+    </select>
+
+    <!-- 分页查询相关：查询员工总数，符合条件-->
+    <sql id="queryWhere">
+        <where>
+            <if test="query.articleTitle != null">
+                article_title like concat('%',#{query.articleTitle},'%')
+            </if>
+            <if test="query.articleContent != null">
+                and article_content like concat('%',#{query.articleContent},'%')
+            </if>
+            <if test="query.articleCreateTime != null">
+                and article_create_time = #{query.articleCreateTime},
+            </if>
+            <if test="query.articleLastUpdateTime != null">
+                and article_last_update_time = #{query.articleLastUpdateTime},
+            </if>
+            <if test="query.userId != null">
+                and user_id = #{query.userId},
+            </if>
+            <if test="query.likeCount != null">
+                and like_count = #{query.likeCount},
+            </if>
+            <if test="query.viewCount != null">
+                and view_count = #{query.viewCount},
+            </if>
+        </where>
+    </sql>
+
+    <!-- 分页查询-->
+    <select id="selectPage" resultType="com.example.synu.pojo.Articles">
+        select
+        article_id,article_title,article_content,
+        article_create_time,article_last_update_time,
+        like_count,view_count,user_nick_name
+        from articles a
+        inner JOIN user u ON a.user_id = u.user_id
+        <include refid="queryWhere"></include> and a.del_flag = 0
+        order by article_last_update_time desc
+    </select>
+
+    <!--时间排前三的三个文章-->
+    <select id="getThreeArt" resultType="com.example.synu.pojo.Articles">
+        select
+            article_id,article_title,article_content,
+            article_create_time,article_last_update_time,
+            like_count,view_count,user_nick_name
+        from articles a
+                 inner JOIN user u ON a.user_id = u.user_id
+        where a.del_flag = 0
+        order by article_last_update_time desc
+            limit 3
+    </select>
+
+    <!--分页查询我自己的文章-->
+    <select id="articleMySelect" resultType="com.example.synu.pojo.Articles">
+        select
+        article_id,article_title,article_content,
+        article_create_time,article_last_update_time,
+        like_count,view_count,user_nick_name
+        from articles a
+        inner JOIN user u ON a.user_id = u.user_id
+        where a.del_flag = 0 and a.user_id = #{id}
+        order by article_last_update_time desc
+    </select>
+
+    <!--得到该用户的点赞和浏览总量-->
+    <select id="getLikeAndView" resultType="com.example.synu.pojo.Articles">
+        SELECT
+            SUM(like_count) AS like_count,
+            SUM(view_count) AS view_count
+        FROM
+            articles
+        WHERE
+            user_id = #{id};
+    </select>
+
+    <!--新增博客-->
+    <insert id="articleInsert" parameterType="com.example.synu.pojo.Articles">
+        insert into articles
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="articleId != null">
+                article_id,
+            </if>
+            <if test="articleTitle != null">
+                article_title,
+            </if>
+            <if test="articleContent != null">
+                article_content,
+            </if>
+            <if test="articleCreateTime != null">
+                article_create_time,
+            </if>
+            <if test="articleLastUpdateTime != null">
+                article_last_update_time,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+                like_count,view_count,del_flag,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="articleId != null">
+                #{articleId,jdbcType=INTEGER},
+            </if>
+            <if test="articleTitle != null">
+                #{articleTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="articleContent != null">
+                #{articleContent,jdbcType=VARCHAR},
+            </if>
+            <if test="articleCreateTime != null">
+                #{articleCreateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="articleLastUpdateTime != null">
+                #{articleLastUpdateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            0,0,0
+        </trim>
+    </insert>
+
+    <!--删除博客-->
+    <update id="articleDelete" parameterType="java.lang.Integer">
+        update articles
+        set del_flag = 1
+        where article_id = #{id}
+    </update>
+
+    <!--得到一篇文章-->
+    <select id="getOneArticle" parameterType="java.lang.Integer" resultType="com.example.synu.pojo.Articles">
+        select
+        article_id,article_title,article_content,
+        article_create_time,article_last_update_time,
+        like_count,view_count,user_nick_name
+        from articles a
+        INNER JOIN user u ON a.user_id = u.user_id
+        where article_id = #{id} and a.del_flag = 0
+    </select>
+
+    <!--修改得到的那篇文章-->
+    <update id="articleUpdate" parameterType="com.example.synu.pojo.Articles">
+        update articles
+        <set>
+            <if test="articleId != null">
+                article_id = #{articleId,jdbcType=INTEGER},
+            </if>
+            <if test="articleTitle != null">
+                article_title = #{articleTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="articleContent != null">
+                article_content = #{articleContent,jdbcType=VARCHAR},
+            </if>
+            <if test="articleCreateTime != null">
+                article_create_time = #{articleCreateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="articleLastUpdateTime != null">
+                article_last_update_time = #{articleLastUpdateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="likeCount != null">
+                like_count = #{likeCount,jdbcType=INTEGER},
+            </if>
+            <if test="viewCount != null">
+                view_count = #{viewCount,jdbcType=INTEGER},
+            </if>
+        </set>
+        where article_id = #{articleId}
+    </update>
+
+
+
+
+
+
+</mapper>
