@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,8 +26,9 @@ public class PictureConller {
 
     //    单文件上传
     @PostMapping("/pictureInsert")
-    public void upload(MultipartFile file) {
-        String fileName = file.getOriginalFilename();
+    public void upload(@RequestParam(value = "file", required = false) MultipartFile file,
+                       @RequestParam(value = "articleId", required = false) Integer articleId) {
+        System.out.println(articleId);
         File saveFile = new File(pictureurl);
         if (!saveFile.exists()) {
             //若不存在该目录，则创建目录
@@ -34,20 +36,18 @@ public class PictureConller {
         }
         //new一个实体类
         Picture picture = new Picture();
-        //拼接url，采用随机数，保证每个图片的url不同
+        //拼接name，采用随机数，保证每个图片的name不同
         UUID uuid = UUID.randomUUID();
-        //拼接后的url
-        String url = file.getOriginalFilename().replace(".","")+uuid;
         //图片名称
-        String name =file.getOriginalFilename();
-        //将url和name 分别set
-        picture.setPictureUrl(url);
+        String name = uuid + ".jpg";
+        //nameset
         picture.setPictureName(name);
+        picture.setArticleId(articleId);
         //存入数据库，这里可以加if判断
         pictureService.pictureInsert(picture);
         try {
             //将文件保存指定目录
-            file.transferTo(new File(pictureurl + fileName));
+            file.transferTo(new File(pictureurl + name));
         } catch (Exception e) {
             e.printStackTrace();
         }

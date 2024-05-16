@@ -94,7 +94,7 @@
     </select>
 
     <!--新增博客-->
-    <insert id="articleInsert" parameterType="com.example.synu.pojo.Articles">
+    <insert id="articleInsert" parameterType="com.example.synu.pojo.Articles" useGeneratedKeys="true" keyProperty="articleId">
         insert into articles
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="articleId != null">
@@ -189,9 +189,6 @@
         </set>
         where article_id = #{articleId}
     </update>
-
-
-
 
 
 

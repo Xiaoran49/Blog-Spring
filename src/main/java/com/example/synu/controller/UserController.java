@@ -41,15 +41,8 @@ public class UserController {
     public ResponseEntity<LoginResponse> login(User user){
         user = userService.userLogin(user);
         if (user!= null){
-//            if (user.getUserIsAdmin() == 1){
-                //登陆成功
                 LoginResponse loginResponse = new LoginResponse(200, "登录成功！",user);
                 return new ResponseEntity<>(loginResponse, HttpStatus.OK);
-//            } else{
-                //不是管理员账户，登陆失败
-//                LoginResponse loginResponse = new LoginResponse(501, "不是管理员权限，请联系管理员！",user);
-//                return new ResponseEntity<>(loginResponse, HttpStatus.OK);
-//            }
         }else {
             //登陆失败
             LoginResponse loginResponse = new LoginResponse(500, "用户名或密码错误！",user);

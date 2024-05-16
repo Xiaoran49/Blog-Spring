@@ -53,9 +53,9 @@ public class ArticleController {
 
     //新增文章
     @PostMapping ("/articleInsert")
-    public void articleInsert(@RequestBody Articles articles)
+    public int articleInsert(@RequestBody Articles articles)
     {
-        articleService.articleInsert(articles);
+        return articleService.articleInsert(articles);
     }
 
     //删除文章

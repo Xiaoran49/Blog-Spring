@@ -65,7 +65,9 @@ public class ArticleServiceImpl implements ArticleService {
         String today = dateFormat.format(currentDate);
         articles.setArticleCreateTime(today);
         articles.setArticleLastUpdateTime(today);
-        return articlesMapper.articleInsert(articles);
+        articlesMapper.articleInsert(articles);
+        articles.getArticleId();
+        return articles.getArticleId();
     }
 
     //删除博客

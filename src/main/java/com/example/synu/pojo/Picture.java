@@ -10,6 +10,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Picture {
+    private Integer articleId;
     private String pictureName;
-    private String pictureUrl;
 }

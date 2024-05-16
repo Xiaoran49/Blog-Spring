@@ -2,13 +2,14 @@ package com.example.synu.service;
 
 
 
-import com.example.synu.pojo.Articles;
 import com.example.synu.pojo.User;
 import com.example.synu.pojo.UserQuery;
 import com.github.pagehelper.PageInfo;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public interface UserService {
 
 
