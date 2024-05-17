@@ -1,18 +1,24 @@
 package com.example.synu.controller;
 
 import com.example.synu.pojo.LoginResponse;
+import com.example.synu.pojo.Picture;
 import com.example.synu.pojo.User;
 import com.example.synu.pojo.UserQuery;
 import com.example.synu.service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
@@ -97,8 +103,31 @@ public class UserController {
     }
 
     //修改得到的一个用户数据
-    @GetMapping("/userUpdate")
-    public void userUpdate(User user){
+    @PostMapping("/userUpdate")
+    public void userUpdate(@RequestParam(value = "file", required = false) MultipartFile file,
+                           @RequestParam(value = "user", required = false) String userData) throws JsonProcessingException {
+        User user = null;
+        if (userData != null && !userData.isEmpty()) {
+            user = new ObjectMapper().readValue(userData, User.class);
+        }
+        if (file != null){
+            String oldName = userService.getOneUser(user.getUserId()).getAvatar();
+            File oldFile = new File("E:\\SYNU\\Graduation Project\\synu-pro\\src\\assets\\uploadImgs\\" + oldName);
+            if (oldFile.exists()){
+                oldFile.delete();
+            }
+            //拼接name，采用随机数，保证每个图片的name不同
+            UUID uuid = UUID.randomUUID();
+            //图片名称
+            String name = uuid + ".jpg";
+            user.setAvatar(name);
+            try {
+                //将文件保存指定目录
+                file.transferTo(new File("E:\\SYNU\\Graduation Project\\synu-pro\\src\\assets\\uploadImgs\\" + name));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         userService.userUpdate(user);
     }
 

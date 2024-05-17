@@ -23,6 +23,7 @@ public class User{
     private String userRegTime;
     private Integer userAge;
     private Integer delFlag;
+    private String avatar;
     private Integer userIsAdmin;
 
 }

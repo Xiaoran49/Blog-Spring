@@ -8,7 +8,7 @@
     <sql id="Base_Column_List">
         user_id,user_nick_name,user_name,user_password,
         user_email,user_phone_number,user_sex,
-        user_introduce,user_reg_time,user_age,user_is_admin
+        user_introduce,user_reg_time,user_age,del_flag,avatar,user_is_admin
     </sql>
 
     <select id="userSelectAll" resultType="com.example.synu.pojo.User">
@@ -37,7 +37,8 @@
 
 
     <select id="userTest" resultType="com.example.synu.pojo.User">
-        select *
+        select
+        <include refid="Base_Column_List"></include>
         from user
         where user_name = #{userName}
         and user_password = #{userPassword}
@@ -94,6 +95,12 @@
             <if test="query.userAge != null">
                 and user_age = #{query.userAge}
             </if>
+            <if test="query.userIsAdmin != null">
+                and user_is_admin = #{query.userIsAdmin}
+            </if>
+            <if test="query.avatar != null">
+                and avatar = #{query.avatar}
+            </if>
             and del_flag = 0
         </where>
     </sql>
@@ -141,6 +148,7 @@
                 </if>
                 user_is_admin,
                 del_flag,
+                avatar
             </trim>
             <trim prefix="values (" suffix=")" suffixOverrides=",">
                     <if test="userId != null">
@@ -174,7 +182,8 @@
                         #{userAge,jdbcType=INTEGER},
                     </if>
                     0,
-                    0
+                    0,
+                    "user.png"
                 </trim>
     </insert>
 
@@ -218,6 +227,9 @@
             </if>
             <if test="userAge != null">
                 user_age = #{userAge,jdbcType=INTEGER},
+            </if>
+            <if test="avatar != null">
+                avatar = #{avatar,jdbcType=VARCHAR},
             </if>
         </set>
         where user_id = #{userId}

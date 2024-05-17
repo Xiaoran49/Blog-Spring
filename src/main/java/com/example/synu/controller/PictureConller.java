@@ -28,7 +28,6 @@ public class PictureConller {
     @PostMapping("/pictureInsert")
     public void upload(@RequestParam(value = "file", required = false) MultipartFile file,
                        @RequestParam(value = "articleId", required = false) Integer articleId) {
-        System.out.println(articleId);
         File saveFile = new File(pictureurl);
         if (!saveFile.exists()) {
             //若不存在该目录，则创建目录
