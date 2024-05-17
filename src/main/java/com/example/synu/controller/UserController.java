@@ -1,7 +1,6 @@
 package com.example.synu.controller;
 
 import com.example.synu.pojo.LoginResponse;
-import com.example.synu.pojo.Picture;
 import com.example.synu.pojo.User;
 import com.example.synu.pojo.UserQuery;
 import com.example.synu.service.UserService;
