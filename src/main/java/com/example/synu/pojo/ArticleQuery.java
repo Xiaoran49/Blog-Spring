@@ -21,6 +21,7 @@ public class ArticleQuery{
     private Integer userId;
     private Integer likeCount;
     private Integer viewCount;
+    private String articleImg;
 
 
 

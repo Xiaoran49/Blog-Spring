@@ -8,7 +8,7 @@
     <sql id="Base_Column_List">
         article_id,article_title,article_content,
         article_create_time,article_last_update_time,user_id,
-        like_count,view_count
+        like_count,view_count,article_img
     </sql>
 
     <!--查询文章总数-->
@@ -50,7 +50,7 @@
         select
         article_id,article_title,article_content,
         article_create_time,article_last_update_time,
-        like_count,view_count,user_nick_name
+        like_count,view_count,user_nick_name,article_img
         from articles a
         inner JOIN user u ON a.user_id = u.user_id
         <include refid="queryWhere"></include> and a.del_flag = 0
@@ -62,7 +62,7 @@
         select
             article_id,article_title,article_content,
             article_create_time,article_last_update_time,
-            like_count,view_count,user_nick_name
+            like_count,view_count,user_nick_name,article_img
         from articles a
                  inner JOIN user u ON a.user_id = u.user_id
         where a.del_flag = 0
@@ -75,7 +75,7 @@
         select
         article_id,article_title,article_content,
         article_create_time,article_last_update_time,
-        like_count,view_count,user_nick_name
+        like_count,view_count,user_nick_name,article_img
         from articles a
         inner JOIN user u ON a.user_id = u.user_id
         where a.del_flag = 0 and a.user_id = #{id}
@@ -115,6 +115,9 @@
             <if test="userId != null">
                 user_id,
             </if>
+            <if test="articleImg != null">
+                article_img,
+            </if>
                 like_count,view_count,del_flag,
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -136,6 +139,9 @@
             <if test="userId != null">
                 #{userId,jdbcType=INTEGER},
             </if>
+            <if test="articleImg != null">
+                #{articleImg,jdbcType=VARCHAR},
+            </if>
             0,0,0
         </trim>
     </insert>
@@ -152,7 +158,7 @@
         select
         article_id,article_title,article_content,
         article_create_time,article_last_update_time,
-        like_count,view_count,user_nick_name
+        like_count,view_count,user_nick_name,article_img
         from articles a
         INNER JOIN user u ON a.user_id = u.user_id
         where article_id = #{id} and a.del_flag = 0

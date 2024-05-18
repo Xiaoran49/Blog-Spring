@@ -21,6 +21,7 @@ public class Articles{
     private String articleLastUpdateTime;
     private Integer likeCount;
     private Integer viewCount;
+    private String articleImg;
 
 
 }

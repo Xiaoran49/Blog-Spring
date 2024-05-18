@@ -2,12 +2,18 @@ package com.example.synu.controller;
 
 import com.example.synu.pojo.ArticleQuery;
 import com.example.synu.pojo.Articles;
+import com.example.synu.pojo.User;
 import com.example.synu.service.ArticleService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
+import java.util.UUID;
 
 
 @RestController
@@ -53,9 +59,31 @@ public class ArticleController {
 
     //新增文章
     @PostMapping ("/articleInsert")
-    public int articleInsert(@RequestBody Articles articles)
-    {
-        return articleService.articleInsert(articles);
+    public int articleInsert(@RequestParam(value = "file", required = false) MultipartFile file,
+                             @RequestParam(value = "article", required = false) String articleDate) throws JsonProcessingException {
+        Articles article = new Articles();
+        if (articleDate != null && !articleDate.isEmpty()) {
+            article = new ObjectMapper().readValue(articleDate, Articles.class);
+        }
+        if (file != null){
+//            String oldName = articleService.getOneArticle(article.getArticleId()).getArticleImg();
+//            File oldFile = new File("E:\\SYNU\\Graduation Project\\synu-pro\\src\\assets\\uploadImgs\\" + oldName);
+//            if (oldFile.exists()){
+//                oldFile.delete();
+//            }
+            //拼接name，采用随机数，保证每个图片的name不同
+            UUID uuid = UUID.randomUUID();
+            //图片名称
+            String name = uuid + ".jpg";
+            article.setArticleImg(name);
+            try {
+                //将文件保存指定目录
+                file.transferTo(new File("E:\\SYNU\\Graduation Project\\synu-pro\\src\\assets\\uploadImgs\\" + name));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return articleService.articleInsert(article);
     }
 
     //删除文章
