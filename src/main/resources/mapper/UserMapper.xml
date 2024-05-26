@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.synu.mapper.UserMapper">
+<mapper namespace="com.graduation.synu.mapper.UserMapper">
 
 
     <sql id="Base_Column_List">
@@ -11,7 +11,7 @@
         user_introduce,user_reg_time,user_age,del_flag,avatar,user_is_admin
     </sql>
 
-    <select id="userSelectAll" resultType="com.example.synu.pojo.User">
+    <select id="userSelectAll" resultType="com.graduation.synu.pojo.User">
         select
         <include refid="Base_Column_List"></include>
         from user
@@ -29,14 +29,14 @@
     </select>
 
     <!--查询用户姓名-->
-    <select id="getUserName" resultType="com.example.synu.pojo.User">
+    <select id="getUserName" resultType="com.graduation.synu.pojo.User">
         select user_id,user_nick_name,user_name,user_password
         from user
         where del_flag = 0
     </select>
 
 
-    <select id="userTest" resultType="com.example.synu.pojo.User">
+    <select id="userTest" resultType="com.graduation.synu.pojo.User">
         select
         <include refid="Base_Column_List"></include>
         from user
@@ -46,7 +46,7 @@
 
 
     <!--用户登录查询-->
-    <select id="userLogin" resultType="com.example.synu.pojo.User">
+    <select id="userLogin" resultType="com.graduation.synu.pojo.User">
         select
         <include refid="Base_Column_List"></include>
         from user
@@ -105,7 +105,7 @@
         </where>
     </sql>
     <!-- 分页查询-->
-    <select id="selectPage" resultType="com.example.synu.pojo.User">
+    <select id="selectPage" resultType="com.graduation.synu.pojo.User">
         select
         <include refid="Base_Column_List"></include>
         from user
@@ -113,7 +113,7 @@
     </select>
 
     <!--插入用户-->
-    <insert id="userInsert" parameterType="com.example.synu.pojo.User">
+    <insert id="userInsert" parameterType="com.graduation.synu.pojo.User">
             insert into user
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 <if test="userId != null">
@@ -188,7 +188,7 @@
     </insert>
 
     <!--得到一个用户-->
-    <select id="getOneUser" parameterType="java.lang.Integer" resultType="com.example.synu.pojo.User">
+    <select id="getOneUser" parameterType="java.lang.Integer" resultType="com.graduation.synu.pojo.User">
         select
         <include refid="Base_Column_List"></include>
         from user
@@ -198,7 +198,7 @@
 
 
     <!--修改得到的一个用户-->
-    <update id="userUpdate" parameterType="com.example.synu.pojo.User">
+    <update id="userUpdate" parameterType="com.graduation.synu.pojo.User">
         update user
         <set>
             <if test="userNickName != null">

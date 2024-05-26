@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.synu.mapper.ArticlesMapper">
+<mapper namespace="com.graduation.synu.mapper.ArticlesMapper">
 
 
     <sql id="Base_Column_List">
@@ -46,7 +46,7 @@
     </sql>
 
     <!-- 分页查询-->
-    <select id="selectPage" resultType="com.example.synu.pojo.Articles">
+    <select id="selectPage" resultType="com.graduation.synu.pojo.Articles">
         select
         article_id,article_title,article_content,
         article_create_time,article_last_update_time,
@@ -58,7 +58,7 @@
     </select>
 
     <!--时间排前三的三个文章-->
-    <select id="getThreeArt" resultType="com.example.synu.pojo.Articles">
+    <select id="getThreeArt" resultType="com.graduation.synu.pojo.Articles">
         select
             article_id,article_title,article_content,
             article_create_time,article_last_update_time,
@@ -71,7 +71,7 @@
     </select>
 
     <!--分页查询我自己的文章-->
-    <select id="articleMySelect" resultType="com.example.synu.pojo.Articles">
+    <select id="articleMySelect" resultType="com.graduation.synu.pojo.Articles">
         select
         article_id,article_title,article_content,
         article_create_time,article_last_update_time,
@@ -83,7 +83,7 @@
     </select>
 
     <!--得到该用户的点赞和浏览总量-->
-    <select id="getLikeAndView" resultType="com.example.synu.pojo.Articles">
+    <select id="getLikeAndView" resultType="com.graduation.synu.pojo.Articles">
         SELECT
             SUM(like_count) AS like_count,
             SUM(view_count) AS view_count
@@ -94,7 +94,7 @@
     </select>
 
     <!--新增博客-->
-    <insert id="articleInsert" parameterType="com.example.synu.pojo.Articles" useGeneratedKeys="true" keyProperty="articleId">
+    <insert id="articleInsert" parameterType="com.graduation.synu.pojo.Articles" useGeneratedKeys="true" keyProperty="articleId">
         insert into articles
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="articleId != null">
@@ -154,7 +154,7 @@
     </update>
 
     <!--得到一篇文章-->
-    <select id="getOneArticle" parameterType="java.lang.Integer" resultType="com.example.synu.pojo.Articles">
+    <select id="getOneArticle" parameterType="java.lang.Integer" resultType="com.graduation.synu.pojo.Articles">
         select
         article_id,article_title,article_content,
         article_create_time,article_last_update_time,
@@ -165,7 +165,7 @@
     </select>
 
     <!--修改得到的那篇文章-->
-    <update id="articleUpdate" parameterType="com.example.synu.pojo.Articles">
+    <update id="articleUpdate" parameterType="com.graduation.synu.pojo.Articles">
         update articles
         <set>
             <if test="articleId != null">

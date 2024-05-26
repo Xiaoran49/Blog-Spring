@@ -8,20 +8,20 @@
         <version>2.7.12</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.example</groupId>
-    <artifactId>demo</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>demo</name>
-    <description>springboot1</description>
+    <groupId>com.graduation</groupId>
+    <artifactId>synu</artifactId>
+    <version>0.0.1</version>
+    <name>synu</name>
+    <description>springboot-synu</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>
     <dependencies>
-            <dependency>
+        <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-jdbc</artifactId>
-            </dependency>
-            <dependency>
+        </dependency>
+        <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>
             </dependency>
