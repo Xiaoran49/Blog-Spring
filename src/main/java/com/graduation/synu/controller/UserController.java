@@ -85,8 +85,8 @@ public class UserController {
 
     //重写分页查询 查所有
     @GetMapping("/userSelectAll")
-    public List<User> userSelectAll(){
-        return userService.userSelectAll();
+    public List<User> userSelectAll(Integer id){
+        return userService.userSelectAll(id);
     }
 
     //用户新增
@@ -101,6 +101,12 @@ public class UserController {
         return userService.getOneUser(id);
     }
 
+    //修改密码
+    @GetMapping("/userUpdatePwd")
+    public void userUpdatePwd(User user){
+        userService.userUpdatePwd(user);
+    }
+
     //修改得到的一个用户数据
     @PostMapping("/userUpdate")
     public void userUpdate(@RequestParam(value = "file", required = false) MultipartFile file,
@@ -111,9 +117,11 @@ public class UserController {
         }
         if (file != null){
             String oldName = userService.getOneUser(user.getUserId()).getAvatar();
-            File oldFile = new File("E:\\SYNU\\Graduation Project\\synu-pro\\src\\assets\\uploadImgs\\" + oldName);
-            if (oldFile.exists()){
-                oldFile.delete();
+            if (!oldName.equals("user.png")){
+                File oldFile = new File("E:\\SYNU\\Graduation Project\\synu-pro\\src\\assets\\uploadImgs\\" + oldName);
+                if (oldFile.exists()){
+                    oldFile.delete();
+                }
             }
             //拼接name，采用随机数，保证每个图片的name不同
             UUID uuid = UUID.randomUUID();

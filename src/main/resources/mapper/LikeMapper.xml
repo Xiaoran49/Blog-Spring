@@ -46,7 +46,7 @@
     <select id="getLikeArticles" resultType="com.graduation.synu.pojo.Articles">
         SELECT
             article_id,a.user_id as user_id,article_title,article_content,article_create_time,article_last_update_time,
-            like_count,view_count,user_nick_name
+            like_count,view_count,user_nick_name,article_img
         FROM
             articles a
                 INNER JOIN

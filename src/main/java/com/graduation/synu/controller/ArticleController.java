@@ -65,11 +65,6 @@ public class ArticleController {
             article = new ObjectMapper().readValue(articleDate, Articles.class);
         }
         if (file != null){
-//            String oldName = articleService.getOneArticle(article.getArticleId()).getArticleImg();
-//            File oldFile = new File("E:\\SYNU\\Graduation Project\\synu-pro\\src\\assets\\uploadImgs\\" + oldName);
-//            if (oldFile.exists()){
-//                oldFile.delete();
-//            }
             //拼接name，采用随机数，保证每个图片的name不同
             UUID uuid = UUID.randomUUID();
             //图片名称
@@ -100,10 +95,34 @@ public class ArticleController {
     }
 
     //修改得到的那篇文章
-    @GetMapping("/articleUpdate")
-    public void articleUpdate(Articles articles)
-    {
-        articleService.articleUpdate(articles);
+    @PostMapping("/articleUpdate")
+    public void articleUpdate(@RequestParam(value = "file", required = false) MultipartFile file,
+                              @RequestParam(value = "article", required = false) String articleDate) throws JsonProcessingException {
+        Articles article = new Articles();
+        if (articleDate != null && !articleDate.isEmpty()) {
+            article = new ObjectMapper().readValue(articleDate, Articles.class);
+        }
+        if (file != null){
+            String oldName = articleService.getOneArticle(article.getArticleId()).getArticleImg();
+            if(!oldName.equals("articleImg.jpg")){
+                File oldFile = new File("E:\\SYNU\\Graduation Project\\synu-pro\\src\\assets\\uploadImgs\\" + oldName);
+                if (oldFile.exists()){
+                    oldFile.delete();
+                }
+            }
+            //拼接name，采用随机数，保证每个图片的name不同
+            UUID uuid = UUID.randomUUID();
+            //图片名称
+            String name = uuid + ".jpg";
+            article.setArticleImg(name);
+            try {
+                //将文件保存指定目录
+                file.transferTo(new File("E:\\SYNU\\Graduation Project\\synu-pro\\src\\assets\\uploadImgs\\" + name));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        articleService.articleUpdate(article);
     }
 
 

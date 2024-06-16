@@ -68,8 +68,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> userSelectAll() {
-        return userMapper.userSelectAll();
+    public List<User> userSelectAll(Integer id) {
+        return userMapper.userSelectAll(id);
+    }
+
+    //修改密码
+    @Override
+    public int userUpdatePwd(User user) {
+        String encryptedPassword = MD5Config.getMD5(user.getUserPassword());
+        user.setUserPassword(encryptedPassword);
+//        System.out.println("加密后的密码："+encryptedPassword);
+        return userMapper.userUpdatePwd(user);
     }
 
     //新增用户
@@ -94,9 +103,6 @@ public class UserServiceImpl implements UserService {
     //更新用户
     @Override
     public int userUpdate(User user) {
-        //MD5加密密码
-        String encryptedPassword = MD5Config.getMD5(user.getUserPassword());
-        user.setUserPassword(encryptedPassword);
         return userMapper.userUpdate(user);
     }
 

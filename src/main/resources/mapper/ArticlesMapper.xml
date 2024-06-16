@@ -192,6 +192,9 @@
             <if test="viewCount != null">
                 view_count = #{viewCount,jdbcType=INTEGER},
             </if>
+            <if test="articleImg != null">
+                article_img = #{articleImg,jdbcType=VARCHAR},
+            </if>
         </set>
         where article_id = #{articleId}
     </update>

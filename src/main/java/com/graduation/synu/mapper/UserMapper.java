@@ -41,7 +41,7 @@ public interface UserMapper {
     //分页查询
     List<User> selectPage(@Param("query") UserQuery query);
 
-    List<User> userSelectAll();
+    List<User> userSelectAll(Integer id);
 
     //新增用户
     int userInsert(User user);
@@ -56,4 +56,5 @@ public interface UserMapper {
     int userDelete(Integer id);
 
 
+    int userUpdatePwd(User user);
 }

@@ -34,9 +34,10 @@ public interface UserService {
     PageInfo<User> getPage(UserQuery query, int page, int size);
 
     //重写分页查询 查所有
-    List<User> userSelectAll();
+    List<User> userSelectAll(Integer id);
 
-
+    //修改密码
+    int userUpdatePwd(User user);
 
     //用户新增
     int userInsert(User user);
